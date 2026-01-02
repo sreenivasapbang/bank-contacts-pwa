@@ -33,16 +33,16 @@ async function loadContacts() {
   render(data);
 
   // Search filter with debug logs
-  search.addEventListener('input', e => {
+    search.addEventListener('input', e => {
     const q = e.target.value.toLowerCase().trim();
     console.log("Search query:", q);
   
     const filtered = data.filter(c => {
-      // Safely convert each field to string before checking
-      const bank = String(c.bank_name || "").toLowerCase();
-      const official = String(c.official_name || "").toLowerCase();
-      const contact = String(c.contact_number || "").toLowerCase();
-      const email = String(c.email || "").toLowerCase();
+      // Convert every field safely to string
+      const bank = (c.bank_name || "").toString().toLowerCase();
+      const official = (c.official_name || "").toString().toLowerCase();
+      const contact = (c.contact_number || "").toString().toLowerCase();
+      const email = (c.email || "").toString().toLowerCase();
   
       return (
         bank.includes(q) ||
@@ -63,5 +63,6 @@ loadContacts();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
 
 
