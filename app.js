@@ -32,15 +32,19 @@ async function loadContacts() {
   // Initial render
   render(data);
 
-  // Search filter
+  // Search filter with debug logs
   search.addEventListener('input', e => {
     const q = e.target.value.toLowerCase().trim();
+    console.log("Search query:", q);  // 🔍 Debug: shows what you typed
+
     const filtered = data.filter(c =>
       c.bank_name.toLowerCase().includes(q) ||
       c.official_name.toLowerCase().includes(q) ||
       c.contact_number.toLowerCase().includes(q) ||
       c.email.toLowerCase().includes(q)
     );
+
+    console.log("Filtered results:", filtered);  // 🔍 Debug: shows matching contacts
     render(filtered);
   });
 }
