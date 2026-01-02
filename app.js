@@ -5,17 +5,28 @@ async function loadContacts() {
   const results = document.getElementById('results');
 
   function render(list) {
-    results.innerHTML = '';
-    list.forEach(c => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>${c.bank_name}</strong><br>
-        ${c.official_name}<br>
-        📞 <a href="tel:${c.contact_number}">${c.contact_number}</a><br>
-        📧 <a href="mailto:${c.email}">${c.email}</a>
-      `;
-      results.appendChild(li);
-    });
+    results.innerHTML = `
+      <table border="1" cellpadding="5" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>Bank Name</th>
+            <th>Official Name</th>
+            <th>Contact Number</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(c => `
+            <tr>
+              <td>${c.bank_name}</td>
+              <td>${c.official_name}</td>
+              <td><a href="tel:${c.contact_number}">${c.contact_number}</a></td>
+              <td><a href="mailto:${c.email}">${c.email}</a></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
   }
 
   // Initial render
@@ -35,3 +46,8 @@ async function loadContacts() {
 }
 
 loadContacts();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
