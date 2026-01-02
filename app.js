@@ -1,5 +1,5 @@
 async function loadContacts() {
-  const res = await fetch('contacts.json');
+  const res = await fetch('contactdetails.json');
   const data = await res.json();
   const search = document.getElementById('search');
   const results = document.getElementById('results');
@@ -55,3 +55,4 @@ loadContacts();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
