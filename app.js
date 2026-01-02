@@ -1,8 +1,9 @@
 async function loadContacts() {
-  const res = await fetch('contactdetails.json');
-  const data = await res.json();
+  const res = await fetch('contacts.json');
+  let data = await res.json();  // Use let so we can modify later
   const search = document.getElementById('search');
   const results = document.getElementById('results');
+  const form = document.getElementById('contactForm');
 
   function render(list) {
     results.innerHTML = `
@@ -32,37 +33,33 @@ async function loadContacts() {
   // Initial render
   render(data);
 
-  // Search filter with debug logs
-    search.addEventListener('input', e => {
+  // Search filter
+  search.addEventListener('input', e => {
     const q = e.target.value.toLowerCase().trim();
-    console.log("Search query:", q);
-  
     const filtered = data.filter(c => {
-      // Convert every field safely to string
       const bank = (c.bank_name || "").toString().toLowerCase();
       const official = (c.official_name || "").toString().toLowerCase();
       const contact = (c.contact_number || "").toString().toLowerCase();
       const email = (c.email || "").toString().toLowerCase();
-  
-      return (
-        bank.includes(q) ||
-        official.includes(q) ||
-        contact.includes(q) ||
-        email.includes(q)
-      );
+      return bank.includes(q) || official.includes(q) || contact.includes(q) || email.includes(q);
     });
-  
-    console.log("Filtered results:", filtered);
     render(filtered);
+  });
+
+  // Handle new contact form
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const newContact = {
+      bank_name: document.getElementById('bankName').value,
+      official_name: document.getElementById('officialName').value,
+      contact_number: document.getElementById('contactNumber').value,
+      email: document.getElementById('email').value
+    };
+    data.push(newContact);  // Add to local array
+    render(data);           // Refresh table
+    form.reset();           // Clear form
+    console.log("New contact added:", newContact);
   });
 }
 
 loadContacts();
-
-// Register service worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-
-
-
