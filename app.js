@@ -35,16 +35,24 @@ async function loadContacts() {
   // Search filter with debug logs
   search.addEventListener('input', e => {
     const q = e.target.value.toLowerCase().trim();
-    console.log("Search query:", q);  // 🔍 Debug: shows what you typed
-
-    const filtered = data.filter(c =>
-      c.bank_name.toLowerCase().includes(q) ||
-      c.official_name.toLowerCase().includes(q) ||
-      c.contact_number.toLowerCase().includes(q) ||
-      c.email.toLowerCase().includes(q)
-    );
-
-    console.log("Filtered results:", filtered);  // 🔍 Debug: shows matching contacts
+    console.log("Search query:", q);
+  
+    const filtered = data.filter(c => {
+      // Safely convert each field to string before checking
+      const bank = String(c.bank_name || "").toLowerCase();
+      const official = String(c.official_name || "").toLowerCase();
+      const contact = String(c.contact_number || "").toLowerCase();
+      const email = String(c.email || "").toLowerCase();
+  
+      return (
+        bank.includes(q) ||
+        official.includes(q) ||
+        contact.includes(q) ||
+        email.includes(q)
+      );
+    });
+  
+    console.log("Filtered results:", filtered);
     render(filtered);
   });
 }
@@ -55,4 +63,5 @@ loadContacts();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
 
