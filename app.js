@@ -18,17 +18,20 @@ async function loadContacts() {
     });
   }
 
+  // Initial render
   render(data);
 
+  // Search filter
   search.addEventListener('input', e => {
-    const q = e.target.value.toLowerCase();
-    render(data.filter(c => c.bank_name.toLowerCase().includes(q)));
+    const q = e.target.value.toLowerCase().trim();
+    const filtered = data.filter(c =>
+      c.bank_name.toLowerCase().includes(q) ||
+      c.official_name.toLowerCase().includes(q) ||
+      c.contact_number.toLowerCase().includes(q) ||
+      c.email.toLowerCase().includes(q)
+    );
+    render(filtered);
   });
 }
 
 loadContacts();
-
-// Register service worker for offline use
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
